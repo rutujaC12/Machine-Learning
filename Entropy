@@ -1,0 +1,31 @@
+import pandas as pd
+import numpy as np
+
+#Define the dataset
+df = pd.read_csv('play_tennis.csv')
+
+#Calculate the entropy of the target variable 'play'
+def entropy(data, target_column):
+    values, counts = np.unique(data[target_column], return_counts=True)
+    probs = counts / len(data)
+    entropy = -np.sum(probs * np.log2(probs))
+    return entropy
+
+target_entropy = entropy(df, 'play')
+print(f"Entropy of 'play': {target_entropy:.2f}")
+
+#Calculate the entropy for each attribute
+def attribute_entropy(data, attribute, target_column):
+    attribute_values = data[attribute].unique()
+    attribute_entropy = 0
+    for value in attribute_values:
+        subset = data[data[attribute] == value]
+        subset_entropy = entropy(subset, target_column)
+        weight = len(subset) / len(data)
+        attribute_entropy += weight * subset_entropy
+    return attribute_entropy
+
+attributes = ['outlook', 'temp', 'humidity', 'wind']
+for attribute in attributes:
+    attribute_ent = attribute_entropy(df, attribute, 'play')
+    print(f"Entropy of '{attribute}': {attribute_ent:.2f}")
