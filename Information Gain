@@ -1,0 +1,32 @@
+import pandas as pd
+import numpy as np
+
+df = pd.read_csv('play_tennis.csv')
+
+# Calculate the entropy of the 'Play' attribute before splitting
+play_counts = df['Play'].value_counts()
+entropy_play = -sum((play_counts / len(df)) * np.log2(play_counts / len(df)))
+
+# Define a function to calculate entropy
+def calculate_entropy(df, attribute):
+    entropy = 0
+    attribute_values = df[attribute].unique()
+    for value in attribute_values:
+        subset = df[df[attribute] == value]
+        subset_counts = subset['Play'].value_counts()
+        subset_entropy = -sum((subset_counts / len(subset)) * np.log2(subset_counts / len(subset)))
+        entropy += (len(subset) / len(df)) * subset_entropy
+    return entropy
+
+# Calculate information gain for each attribute
+attributes = ['Outlook', 'Temp', 'Humidity', 'Wind']
+information_gains = {attribute: entropy_play - calculate_entropy(df, attribute) for attribute in attributes}
+
+# Find the attribute with the highest information gain
+best_attribute = max(information_gains, key=information_gains.get)
+
+print(f"Information Gains:")
+for attribute, gain in information_gains.items():
+    print(f"{attribute}: {gain:.4f}")
+
+print(f"The best attribute to split on is: {best_attribute}")
