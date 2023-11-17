@@ -1,0 +1,11 @@
+Name,Gender,,Income,Buy Car
+Alice,Female,28,50000,Yes
+Bob,Male,,60000,Yes
+Charlie,Male,22,,No
+David,Male,45,75000,Yes
+Eve,Female,,28000,No
+Frank,Male,35,70000,Yes
+Grace,Female,24,48000,Yes
+Hannah,Female,31,,No
+
+
